@@ -25,7 +25,18 @@ class LinearTopo(Topo):
                 self.addLink(prev_switch, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
             prev_switch = switch
             
-           
+class TreeTopo(Topo):
+    def build(self, n):
+        prev_switch = None
+        self.addLink(prev_switch, self.addHost('h1', cpu=.5/n), bw=10, delay='5ms', loss=10, max_queue_size=1000)
+        self.addLink(prev_switch, self.addHost('h2', cpu=.5/n), bw=10, delay='5ms', loss=10, max_queue_size=1000)
+        for i in range(2, n+1):
+            parent = self['s{}'.format(i//2)]
+            switch = self.addSwitch('s{}'.format(i))
+            self.addLink(switch, self.addHost('h{}'.format(2*i-1), cpu=.5/n), bw=10, delay='5ms', loss=10, max_queue_size=1000)
+            self.addLink(switch, self.addHost('h{}'.format(2*i), cpu=.5/n), bw=10, delay='5ms', loss=10, max_queue_size=1000)
+            self.addLink(switch, parent, bw=10, delay='5ms', loss=10, max_queue_size=1000)
+            
 def perfTest(topo_type, num_hosts):
     if topo_type == 'single':
         topo = SingleTopo(num_hosts)
