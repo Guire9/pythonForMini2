@@ -52,15 +52,15 @@ class MeshTopology(Topo):
                 for j in range(i+1, n):
                     self.addLink(switches[i], switches[j], bw=10, delay='5ms', loss=10, max_queue_size=1000)
         
-def perfTest(topo_type, num_hosts):
+def perfTest(topo_type, number):
     if topo_type == 'single':
-        topo = SingleTopology(num_hosts)
+        topo = SingleTopology(number)
     elif topo_type == 'linear':
-        topo = LinearTopology(num_hosts)
+        topo = LinearTopology(number)
     elif topo_type == 'tree':
-        topo = TreeTopology(num_hosts)
+        topo = TreeTopology(number)
     elif topo_type == 'mesh':
-        topo = MeshTopology(num_hosts)                      
+        topo = MeshTopology(number)                      
     else:
         print("Invalid topology type: {}".format(topo_type))
         sys.exit(1)
@@ -72,13 +72,14 @@ def perfTest(topo_type, num_hosts):
     
 if __name__ == '__main__':
     if len(sys.argv) < 3:
-        print("Usage: python {} <topology_type> <num_hosts>".format(sys.argv[0]))
-        print("Topology types: single, linear")
+        print("Do not have type of topology or numeric value.") 
+        print("Usage: python {} <topology_type> <number>".format(sys.argv[0]))
+        print("Topology types: single, linear, tree, mesh")
         sys.exit(1)
     
     topo_type = sys.argv[1]
-    num_hosts = int(sys.argv[2])
-    perfTest(topo_type, num_hosts)
+    number = int(sys.argv[2])
+    perfTest(topo_type, number)
     
    
 
