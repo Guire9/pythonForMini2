@@ -50,7 +50,7 @@ class MeshTopo(Topo):
         self.addLink(host, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
     for i in range(n):
         for j in range(i+1, n):
-            self.addLink(switches[i], switches[j], bw=10, delay='5ms', loss=10, max_queue_size=1000
+            self.addLink(switches[i], switches[j], bw=10, delay='5ms', loss=10, max_queue_size=1000)
         
 def perfTest(topo_type, num_hosts):
     if topo_type == 'single':
