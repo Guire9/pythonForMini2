@@ -66,8 +66,15 @@ def perfTest(topo_type, number):
         sys.exit(1)
     
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, switch=OVSSwitch)
+    print("Start up the network created.)
     net.start()
+    print("Dump host connections.")
+    net.dump()
+    print("Test network connectivity.")
     net.pingAll()
+    print("Test all pairwise bandwidths amongst hosts.")
+    net.iperf()
+    print("Stop the network.")
     net.stop()
     
 if __name__ == '__main__':
