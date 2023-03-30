@@ -26,7 +26,13 @@ class LinearTopo(Topo):
             prev_switch = switch
 
 def perfTest(topo_type, num_hosts):
-    print("f")
+    if topo_type == 'single':
+        topo = SingleTopo(num_hosts)
+    elif topo_type == 'linear':
+        topo = LinearTopo(num_hosts)
+    else:
+        print("Invalid topology type: {}".format(topo_type))
+        sys.exit(1)
     
 if __name__ == '__main__':
     if len(sys.argv) < 3:
@@ -39,13 +45,7 @@ if __name__ == '__main__':
     
     perfTest(topo_type, num_hosts)
     
-    if topo_type == 'single':
-        topo = SingleTopo(num_hosts)
-    elif topo_type == 'linear':
-        topo = LinearTopo(num_hosts)
-    else:
-        print("Invalid topology type: {}".format(topo_type))
-        sys.exit(1)
+   
 
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, switch=OVSSwitch)
     net.start()
