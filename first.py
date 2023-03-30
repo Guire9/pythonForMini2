@@ -42,6 +42,8 @@ def perfTest(topo_type, num_hosts):
         topo = SingleTopo(num_hosts)
     elif topo_type == 'linear':
         topo = LinearTopo(num_hosts)
+    elif topo_type == 'tree':
+        topo = TreeTopo(num_hosts)    
     else:
         print("Invalid topology type: {}".format(topo_type))
         sys.exit(1)
