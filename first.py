@@ -25,7 +25,7 @@ class LinearTopo(Topo):
                 self.addLink(prev_switch, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
             prev_switch = switch
 
-def perfTest():
+def perfTest(topo_type, num_hosts):
     print("f")
     
 if __name__ == '__main__':
@@ -33,10 +33,12 @@ if __name__ == '__main__':
         print("Usage: python {} <topology_type> <num_hosts>".format(sys.argv[0]))
         print("Topology types: single, linear")
         sys.exit(1)
-
+    
     topo_type = sys.argv[1]
     num_hosts = int(sys.argv[2])
-
+    
+    perfTest(topo_type, num_hosts)
+    
     if topo_type == 'single':
         topo = SingleTopo(num_hosts)
     elif topo_type == 'linear':
