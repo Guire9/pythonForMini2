@@ -2,6 +2,8 @@ from mininet.topo import Topo
 from mininet.net import Mininet
 from mininet.node import CPULimitedHost, OVSSwitch
 from mininet.link import TCLink
+from mininet.log import setLogLevel, info
+from mininet.cli import CLI
 import sys
 
 class SingleTopology(Topo):
@@ -69,11 +71,18 @@ def perfTest(topo_type, number):
     print("Start up the network created.)
     net.start()
     print("Dump host connections.")
-    net.dump()
+    for host in net.hosts:
+        info("{}\n".format(host.cmd("ifconfig")))
     print("Test network connectivity.")
     net.pingAll()
+          
     print("Test all pairwise bandwidths amongst hosts.")
-    net.iperf()
+    info("*** Testing pairwise bandwidths\n")
+    for src in net.hosts:
+        for dst in net.hosts:
+            if src != dst:
+                result = src.cmd("iperf -c {} -t 10 -i 1".format(dst.IP()))
+                info("{}\n".format(result))
     print("Stop the network.")
     net.stop()
     
