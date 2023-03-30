@@ -40,17 +40,17 @@ class TreeTopo(Topo):
 class MeshTopo(Topo):
     def build(self, n):
         self = Mininet(topo=None, host=CPULimitedHost, link=TCLink, switch=OVSSwitch)
-    hosts = []
-    switches = []
-    for i in range(1, n+1):
-        host = self.addHost('h{}'.format(i), cpu=.5/n)
-        switch = self.addSwitch('s{}'.format(i))
-        hosts.append(host)
-        switches.append(switch)
-        self.addLink(host, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
-    for i in range(n):
-        for j in range(i+1, n):
-            self.addLink(switches[i], switches[j], bw=10, delay='5ms', loss=10, max_queue_size=1000)
+        hosts = []
+        switches = []
+        for i in range(1, n+1):
+            host = self.addHost('h{}'.format(i), cpu=.5/n)
+            switch = self.addSwitch('s{}'.format(i))
+            hosts.append(host)
+            switches.append(switch)
+            self.addLink(host, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
+            for i in range(n):
+                for j in range(i+1, n):
+                    self.addLink(switches[i], switches[j], bw=10, delay='5ms', loss=10, max_queue_size=1000)
         
 def perfTest(topo_type, num_hosts):
     if topo_type == 'single':
