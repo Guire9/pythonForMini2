@@ -34,6 +34,11 @@ def perfTest(topo_type, num_hosts):
         print("Invalid topology type: {}".format(topo_type))
         sys.exit(1)
     
+    net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, switch=OVSSwitch)
+    net.start()
+    net.pingAll()
+    net.stop()
+    
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         print("Usage: python {} <topology_type> <num_hosts>".format(sys.argv[0]))
@@ -42,13 +47,9 @@ if __name__ == '__main__':
     
     topo_type = sys.argv[1]
     num_hosts = int(sys.argv[2])
-    
     perfTest(topo_type, num_hosts)
     
    
 
-    net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink, switch=OVSSwitch)
-    net.start()
-    net.pingAll()
-    net.stop()
+  
 
