@@ -25,6 +25,9 @@ class LinearTopo(Topo):
                 self.addLink(prev_switch, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
             prev_switch = switch
 
+def perfTest():
+    print("f")
+    
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         print("Usage: python {} <topology_type> <num_hosts>".format(sys.argv[0]))
