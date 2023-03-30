@@ -6,13 +6,13 @@ import sys
 
 class SingleTopo(Topo):
     def build(self, n):
-        s1 = self.addSwitch('s1')
-        h1 = self.addHost('h1', cpu=n*0.5)
-        h2 = self.addHost('h2', cpu=n*0.5)
-        h3 = self.addHost('h3', cpu=n*0.5)
-        self.addLink(h1, s1, bw=10, delay='5ms', loss=10, max_queue_size=1000)
-        self.addLink(h2, s1, bw=10, delay='5ms', loss=10, max_queue_size=1000)
-        self.addLink(h3, s1, bw=10, delay='5ms', loss=10, max_queue_size=1000)
+        switch1 = self.addSwitch('s1')
+        host1 = self.addHost('h1', cpu=n*0.5)
+        host2 = self.addHost('h2', cpu=n*0.5)
+        host3 = self.addHost('h3', cpu=n*0.5)
+        self.addLink(host1, switch1, bw=10, delay='5ms', loss=10, max_queue_size=1000)
+        self.addLink(host2, switch1, bw=10, delay='5ms', loss=10, max_queue_size=1000)
+        self.addLink(host3, switch1, bw=10, delay='5ms', loss=10, max_queue_size=1000)
 
 class LinearTopo(Topo):
     def build(self, n):
@@ -36,14 +36,31 @@ class TreeTopo(Topo):
             self.addLink(switch, self.addHost('h{}'.format(2*i-1), cpu=.5/n), bw=10, delay='5ms', loss=10, max_queue_size=1000)
             self.addLink(switch, self.addHost('h{}'.format(2*i), cpu=.5/n), bw=10, delay='5ms', loss=10, max_queue_size=1000)
             self.addLink(switch, parent, bw=10, delay='5ms', loss=10, max_queue_size=1000)
-            
+
+class MeshTopo(Topo):
+    def build(self, n):
+        self = Mininet(topo=None, host=CPULimitedHost, link=TCLink, switch=OVSSwitch)
+    hosts = []
+    switches = []
+    for i in range(1, n+1):
+        host = self.addHost('h{}'.format(i), cpu=.5/n)
+        switch = self.addSwitch('s{}'.format(i))
+        hosts.append(host)
+        switches.append(switch)
+        self.addLink(host, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
+    for i in range(n):
+        for j in range(i+1, n):
+            self.addLink(switches[i], switches[j], bw=10, delay='5ms', loss=10, max_queue_size=1000
+        
 def perfTest(topo_type, num_hosts):
     if topo_type == 'single':
         topo = SingleTopo(num_hosts)
     elif topo_type == 'linear':
         topo = LinearTopo(num_hosts)
     elif topo_type == 'tree':
-        topo = TreeTopo(num_hosts)    
+        topo = TreeTopo(num_hosts)
+    elif topo_type == 'mesh':
+        topo = MeshTopo(num_hosts)                      
     else:
         print("Invalid topology type: {}".format(topo_type))
         sys.exit(1)
