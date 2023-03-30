@@ -5,7 +5,7 @@ from mininet.link import TCLink
 import sys
 
 class SingleTopo(Topo):
-    def build(self, n=3):
+    def build(self, n):
         s1 = self.addSwitch('s1')
         h1 = self.addHost('h1', cpu=n*0.5)
         h2 = self.addHost('h2', cpu=n*0.5)
@@ -15,7 +15,7 @@ class SingleTopo(Topo):
         self.addLink(h3, s1, bw=10, delay='5ms', loss=10, max_queue_size=1000)
 
 class LinearTopo(Topo):
-    def build(self, n=3):
+    def build(self, n):
         prev_switch = None
         for i in range(n):
             switch = self.addSwitch('s{}'.format(i+1))
@@ -24,7 +24,8 @@ class LinearTopo(Topo):
             if prev_switch:
                 self.addLink(prev_switch, switch, bw=10, delay='5ms', loss=10, max_queue_size=1000)
             prev_switch = switch
-
+            
+           
 def perfTest(topo_type, num_hosts):
     if topo_type == 'single':
         topo = SingleTopo(num_hosts)
